@@ -20,18 +20,12 @@ const AdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch all users
-  const {
-    data: users = [],
-    isLoading: isUsersLoading,
-    error: usersError,
-    refetch: refetchUsers,
-  } = useGetAllUsersQuery();
+  const { data: users = [], refetch: refetchUsers } = useGetAllUsersQuery();
 
   // Fetch all appointments
   const {
     data: appointments = [],
-    isLoading: isAppointmentsLoading,
-    error: appointmentsError,
+
     refetch: refetchAppointments,
   } = useGetAppointmentsQuery();
 

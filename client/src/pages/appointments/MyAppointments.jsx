@@ -21,7 +21,7 @@ const MyAppointments = () => {
 
   useEffect(() => {
     refetch();
-  }, [appointments]);
+  }, [appointments, refetch]);
   // Mutation to delete (cancel) an appointment
   const [cancelAppointment, { isLoading: isCancelling }] =
     useCancelAppointmentMutation();

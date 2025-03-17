@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useCreateAppointmentMutation } from "../../redux/api/appointmentApi";
 
 const BookingAppointment = () => {
-  //   const { id: bookingId } = useParams(); // Extract the booking ID from the URL
   const navigate = useNavigate();
   const [appointmentDate, setAppointmentDate] = useState("");
   const [createAppointment, { isLoading }] = useCreateAppointmentMutation();

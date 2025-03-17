@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useUpdateDoctorProfileMutation } from "../../redux/api/doctorApi";
 import { useNavigate } from "react-router-dom";
 
 const UpdateDoctorProfile = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isEditable, setIsEditable] = useState(false);
   const [formData, setFormData] = useState({

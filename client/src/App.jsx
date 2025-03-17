@@ -1,180 +1,113 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import { useSelector } from "react-redux";
+import React, { Suspense, lazy } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import "./index.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Spinner from "./components/common/Spinner"; // Import Spinner
 
-// Auth Components
-import Login from "./components/auth/Login";
-import Register from "./components/auth/Register";
-import Home from "./components/auth/Home";
-
-// Doctor Components
-import DoctorsList from "./pages/doctors/doctorsList";
-import DoctorDetails from "./pages/doctors/doctorDetails";
-import UpdateDoctorProfile from "./pages/doctors/UpdateDoctorProfile";
-import DoctorDashboard from "./pages/doctors/doctorDashBoard"; // Doctor dashboard
-
-// Admin Components
-import AdminDashboard from "./pages/admin/AdminDashboard"; // Admin dashboard
-
-// Appointment Components
-import BookingAppointment from "./pages/appointments/BookAppointment";
-import MyAppointments from "./pages/appointments/MyAppointments";
-
-// Payment Components
-// import PaymentComponent from "./pages/payment/paymentComponent";
-
-// Header and footer
-import Header from "./components/HeaderFooter/Header";
-import Footer from "./components/HeaderFooter/Footer";
-import AdminLogin from "./pages/admin/AdminLogin";
-import Profile from "./pages/users/Profile";
-import ForgotPassword from "./pages/users/forgotPassword";
-import ResetPassword from "./pages/users/ResetPassword";
-import VerificationPending from "./components/auth/VerificationLanding";
-import EmailVerification from "./pages/users/VerifyEmail";
-
-// Route protection components
-const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
-
-  return children;
-};
-
-// Doctor-only route
-const DoctorRoute = ({ children }) => {
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
-
-  if (!isAuthenticated || user?.role !== "doctor") {
-    return <Navigate to="/" />;
-  }
-
-  return children;
-};
-
-// Patient-only route
-const PatientRoute = ({ children }) => {
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
-
-  if (!isAuthenticated || user?.role !== "patient") {
-    return <Navigate to="/" />;
-  }
-
-  return children;
-};
-
-// Admin-only route
-const AdminRoute = ({ children }) => {
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
-
-  // if (!isAuthenticated || user?.role !== "admin") {
-  //   return <Navigate to="/" />;
-  // }
-
-  return children;
-};
+// Lazy load components
+const Login = lazy(() => import("./components/auth/Login"));
+const Register = lazy(() => import("./components/auth/Register"));
+const Home = lazy(() => import("./components/auth/Home"));
+const DoctorsList = lazy(() => import("./pages/doctors/doctorsList"));
+const DoctorDetails = lazy(() => import("./pages/doctors/doctorDetails"));
+const UpdateDoctorProfile = lazy(() =>
+  import("./pages/doctors/UpdateDoctorProfile")
+);
+const DoctorDashboard = lazy(() => import("./pages/doctors/doctorDashBoard"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const BookingAppointment = lazy(() =>
+  import("./pages/appointments/BookAppointment")
+);
+const MyAppointments = lazy(() =>
+  import("./pages/appointments/MyAppointments")
+);
+const ForgotPassword = lazy(() => import("./pages/users/forgotPassword"));
+const ResetPassword = lazy(() => import("./pages/users/ResetPassword"));
+const EmailVerification = lazy(() => import("./pages/users/VerifyEmail"));
+const VerificationPending = lazy(() =>
+  import("./components/auth/VerificationLanding")
+);
+const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 
 function App() {
   return (
     <Router>
       <div className="App">
-        {/* Toast notifications */}
         <ToastContainer />
 
-        {/* Main content */}
         <main className="container mx-auto py-4 px-4">
-          <Header />
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/" element={<Home />} />
-            <Route path="/doctors" element={<DoctorsList />} />
-            <Route path="/doctors/:id" element={<DoctorDetails />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route
-              path="/verify-email/:token"
-              element={<EmailVerification />}
-            />
-            <Route
-              path="/verification-pending"
-              element={<VerificationPending />}
-            />
+          <Suspense fallback={<Spinner />}>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/doctors" element={<DoctorsList />} />
+              <Route path="/doctors/:id" element={<DoctorDetails />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route
+                path="/verify-email/:token"
+                element={<EmailVerification />}
+              />
+              <Route
+                path="/verification-pending"
+                element={<VerificationPending />}
+              />
 
-            {/* Protected Routes */}
-            <Route
-              path="/book/:doctorId"
-              element={
-                <PatientRoute>
-                  <BookingAppointment />
-                </PatientRoute>
-              }
-            />
-            <Route path="/profile" element={<UpdateDoctorProfile />} />
+              {/* Protected Routes */}
+              <Route
+                path="/book/:doctorId"
+                element={
+                  <PatientRoute>
+                    <BookingAppointment />
+                  </PatientRoute>
+                }
+              />
+              <Route path="/profile" element={<UpdateDoctorProfile />} />
+              <Route
+                path="/appointments"
+                element={
+                  <PrivateRoute>
+                    <MyAppointments />
+                  </PrivateRoute>
+                }
+              />
 
-            <Route
-              path="/appointments"
-              element={
-                <PrivateRoute>
-                  <MyAppointments />
-                </PrivateRoute>
-              }
-            />
+              {/* Doctor Routes */}
+              <Route
+                path="/doctor/profile/update"
+                element={
+                  <DoctorRoute>
+                    <UpdateDoctorProfile />
+                  </DoctorRoute>
+                }
+              />
+              <Route
+                path="/doctor/dashboard/:id"
+                element={
+                  <DoctorRoute>
+                    <DoctorDashboard />
+                  </DoctorRoute>
+                }
+              />
 
-            {/* <Route
-              path="/payment/:appointmentId"
-              element={
-                <PatientRoute>
-                  <PaymentComponent />
-                </PatientRoute>
-              }
-            /> */}
-
-            {/* Doctor-Specific Routes */}
-            <Route
-              path="/doctor/profile/update"
-              element={
-                <DoctorRoute>
-                  <UpdateDoctorProfile />
-                </DoctorRoute>
-              }
-            />
-
-            <Route
-              path="/doctor/dashboard/:id"
-              element={
-                <DoctorRoute>
-                  <DoctorDashboard />
-                </DoctorRoute>
-              }
-            />
-
-            {/* Admin-Specific Routes */}
-            <Route
-              path="/admin/dashboard"
-              element={
-                <AdminRoute>
-                  <AdminDashboard />
-                </AdminRoute>
-              }
-            />
-            <Route path="/admin/login" element={<AdminLogin />} />
-          </Routes>
+              {/* Admin Routes */}
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
+                }
+              />
+              <Route path="/admin/login" element={<AdminLogin />} />
+            </Routes>
+          </Suspense>
         </main>
       </div>
-      <Footer />
     </Router>
   );
 }

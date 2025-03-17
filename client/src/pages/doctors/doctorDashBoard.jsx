@@ -45,7 +45,7 @@ const DoctorDashboard = () => {
   // implement refetch
   useEffect(() => {
     refetch();
-  }, [doctor]);
+  }, [doctor, refetch]);
 
   // Filter appointments based on active tab
   const filterAppointments = () => {
@@ -241,7 +241,7 @@ const DoctorDashboard = () => {
                       const appointmentDate = new Date(
                         appointment.appointment_date
                       );
-                      const isUpcoming = appointmentDate >= new Date();
+                      // const isUpcoming = appointmentDate >= new Date();
 
                       return (
                         <div
