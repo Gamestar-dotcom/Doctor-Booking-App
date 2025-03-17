@@ -1,10 +1,19 @@
 import React, { Suspense, lazy } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./index.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "./components/common/Spinner"; // Import Spinner
+import Footer from "./components/HeaderFooter/Footer";
+import Header from "./components/HeaderFooter/Header";
+
+// Import your route guard components (assuming they exist)
+// // Note: Add the correct import paths for these components
+// import PatientRoute from "./components/routes/PatientRoute";
+// import PrivateRoute from "./components/routes/PrivateRoute";
+// import DoctorRoute from "./components/routes/DoctorRoute";
+// import AdminRoute from "./components/routes/AdminRoute";
 
 // Lazy load components
 const Login = lazy(() => import("./components/auth/Login"));
@@ -39,6 +48,7 @@ function App() {
 
         <main className="container mx-auto py-4 px-4">
           <Suspense fallback={<Spinner />}>
+            <Header />
             <Routes>
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
@@ -58,53 +68,25 @@ function App() {
               />
 
               {/* Protected Routes */}
-              <Route
-                path="/book/:doctorId"
-                element={
-                  <PatientRoute>
-                    <BookingAppointment />
-                  </PatientRoute>
-                }
-              />
+              <Route path="/book/:doctorId" element={<BookingAppointment />} />
               <Route path="/profile" element={<UpdateDoctorProfile />} />
-              <Route
-                path="/appointments"
-                element={
-                  <PrivateRoute>
-                    <MyAppointments />
-                  </PrivateRoute>
-                }
-              />
+              <Route path="/appointments" element={<MyAppointments />} />
 
               {/* Doctor Routes */}
               <Route
                 path="/doctor/profile/update"
-                element={
-                  <DoctorRoute>
-                    <UpdateDoctorProfile />
-                  </DoctorRoute>
-                }
+                element={<UpdateDoctorProfile />}
               />
               <Route
                 path="/doctor/dashboard/:id"
-                element={
-                  <DoctorRoute>
-                    <DoctorDashboard />
-                  </DoctorRoute>
-                }
+                element={<DoctorDashboard />}
               />
 
               {/* Admin Routes */}
-              <Route
-                path="/admin/dashboard"
-                element={
-                  <AdminRoute>
-                    <AdminDashboard />
-                  </AdminRoute>
-                }
-              />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/login" element={<AdminLogin />} />
             </Routes>
+            <Footer />
           </Suspense>
         </main>
       </div>

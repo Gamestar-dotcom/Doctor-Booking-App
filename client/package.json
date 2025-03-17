@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://yourusername.github.io/Doctor-Booking-App",
+  "homepage": "https://gamestar-dotcom.github.io/Doctor-Booking-App/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
