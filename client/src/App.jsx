@@ -8,13 +8,6 @@ import Spinner from "./components/common/Spinner"; // Import Spinner
 import Footer from "./components/HeaderFooter/Footer";
 import Header from "./components/HeaderFooter/Header";
 
-// Import your route guard components (assuming they exist)
-// // Note: Add the correct import paths for these components
-// import PatientRoute from "./components/routes/PatientRoute";
-// import PrivateRoute from "./components/routes/PrivateRoute";
-// import DoctorRoute from "./components/routes/DoctorRoute";
-// import AdminRoute from "./components/routes/AdminRoute";
-
 // Lazy load components
 const Login = lazy(() => import("./components/auth/Login"));
 const Register = lazy(() => import("./components/auth/Register"));
@@ -47,8 +40,8 @@ function App() {
         <ToastContainer />
 
         <main className="container mx-auto py-4 px-4">
+          <Header />
           <Suspense fallback={<Spinner />}>
-            <Header />
             <Routes>
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
@@ -86,8 +79,8 @@ function App() {
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/login" element={<AdminLogin />} />
             </Routes>
-            <Footer />
           </Suspense>
+          <Footer />
         </main>
       </div>
     </Router>
