@@ -4,5 +4,5 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: "/Doctor-Booking-App/", // ✅ Add this line for correct GitHub Pages routing
+  // base: "/Doctor-Booking-App/", // ✅ Add this line for correct GitHub Pages routing
 });

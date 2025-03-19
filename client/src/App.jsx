@@ -7,6 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Spinner from "./components/common/Spinner"; // Import Spinner
 import Footer from "./components/HeaderFooter/Footer";
 import Header from "./components/HeaderFooter/Header";
+import PageNotFound from "./components/common/PageNotFound";
+import PaymentHistoryPage from "./components/common/PaymentHistory";
 
 // Lazy load components
 const Login = lazy(() => import("./components/auth/Login"));
@@ -39,7 +41,7 @@ function App() {
       <div className="App">
         <ToastContainer />
 
-        <main className="container mx-auto py-4 px-4">
+        <main className="container mx-auto py-4 px-2">
           <Header />
           <Suspense fallback={<Spinner />}>
             <Routes>
@@ -47,6 +49,9 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/" element={<Home />} />
+              {/* page not found */}
+              <Route path="*" element={<PageNotFound />} />
+
               <Route path="/doctors" element={<DoctorsList />} />
               <Route path="/doctors/:id" element={<DoctorDetails />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -64,6 +69,7 @@ function App() {
               <Route path="/book/:doctorId" element={<BookingAppointment />} />
               <Route path="/profile" element={<UpdateDoctorProfile />} />
               <Route path="/appointments" element={<MyAppointments />} />
+              <Route path="/payments" element={<PaymentHistoryPage />} />
 
               {/* Doctor Routes */}
               <Route
